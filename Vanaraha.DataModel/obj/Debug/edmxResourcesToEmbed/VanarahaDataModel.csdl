@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VanarahaDbModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="VanarahaDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ItemLinks" EntityType="VanarahaDbModel.ItemLink" />
+    <EntitySet Name="Items" EntityType="VanarahaDbModel.Item" />
+    <EntitySet Name="Topics" EntityType="VanarahaDbModel.Topic" />
+    <AssociationSet Name="FK_ItemLinks_Items" Association="VanarahaDbModel.FK_ItemLinks_Items">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="ItemLink" EntitySet="ItemLinks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Items_Topics" Association="VanarahaDbModel.FK_Items_Topics">
+      <End Role="Topic" EntitySet="Topics" />
+      <End Role="Item" EntitySet="Items" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ItemLink">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Type="Int64" Name="Id" Nullable="false" />
+    <Property Type="Int32" Name="ItemId" Nullable="false" />
+    <Property Type="String" Name="LinkUrl" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="UpdatedDate" Precision="3" />
+    <Property Type="String" Name="UpdatedBy" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="CreatedBy" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Item" Relationship="VanarahaDbModel.FK_ItemLinks_Items" FromRole="ItemLink" ToRole="Item" />
+    <Property Name="ItemLinkName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="TopicId" Nullable="false" />
+    <Property Type="String" Name="MainUrl" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="UpdatedDate" Precision="3" />
+    <Property Type="String" Name="UpdatedBy" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="CreatedBy" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ItemLinks" Relationship="VanarahaDbModel.FK_ItemLinks_Items" FromRole="Item" ToRole="ItemLink" />
+    <NavigationProperty Name="Topic" Relationship="VanarahaDbModel.FK_Items_Topics" FromRole="Item" ToRole="Topic" />
+  </EntityType>
+  <EntityType Name="Topic">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="UpdatedDate" Precision="3" />
+    <Property Type="String" Name="UpdatedBy" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreatedDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="CreatedBy" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Items" Relationship="VanarahaDbModel.FK_Items_Topics" FromRole="Topic" ToRole="Item" />
+  </EntityType>
+  <Association Name="FK_ItemLinks_Items">
+    <End Type="VanarahaDbModel.Item" Role="Item" Multiplicity="1" />
+    <End Type="VanarahaDbModel.ItemLink" Role="ItemLink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ItemLink">
+        <PropertyRef Name="ItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Items_Topics">
+    <End Type="VanarahaDbModel.Topic" Role="Topic" Multiplicity="1" />
+    <End Type="VanarahaDbModel.Item" Role="Item" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Topic">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Item">
+        <PropertyRef Name="TopicId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
